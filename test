@@ -1,0 +1,43 @@
+import math
+
+MATH_PI  = 3.141592653589793238463
+ALTURA = (10.645+0.6-2.23)
+GARRA = 9.5
+BRAZO1 = 14.825
+BRAZO2 = 16.02
+CODA = 4.0
+
+
+def calAngles(x,y,z):
+
+
+  g_theta_1 = math.atan2(y,x)*180 / math.pi
+  z_in = z+GARRA-ALTURA
+  y_rot = -math.sin((g_theta_1-90)*MATH_PI/180)*x+math.cos((g_theta_1-90)*MATH_PI/180)*y
+  y_in = y_rot-CODA
+  S=math.sqrt(math.pow(z_in,2)+math.pow(y_in,2))
+  print("S " +S)
+  g_theta_2=(math.acos((math.pow(S,2)+math.pow(BRAZO1,2)-math.pow(BRAZO2,2))/(2*S*BRAZO1))+math.asin(z_in/S))*180/MATH_PI
+  print("S " + g_theta_2)
+  g_theta_3=(math.acos((math.pow(BRAZO1,2)+math.pow(BRAZO2,2)-math.pow(S,2))/(2*BRAZO1*BRAZO2)))*180/MATH_PI
+  g_theta_3=g_theta_3-(90-g_theta_2)
+
+  g_theta_2=min(max(g_theta_2-15,0),140)
+
+  if(g_theta_3>=45):
+    g_theta_3=100-g_theta_3*7/9
+  else:
+    g_theta_3=147.5-1.83333333*g_theta_3
+    g_theta_3=max(min(g_theta_3,125),20)
+
+  return [int(g_theta_1), int(g_theta_2), int(g_theta_3)]
+
+
+
+[alpha, beta, gamma] = calAngles(15,15,5)
+alpha = -90
+byte1=(alpha & 0xFF00) >> 8
+byte2=(alpha & 0x00FF)
+
+print(byte1)
+print(byte2)
